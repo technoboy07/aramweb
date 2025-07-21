@@ -91,76 +91,90 @@ body, html, #root { /* Target #root as well for full height */
 
 /* --- Hero Section --- */
 .hero-section {
-  width: 100%; /* Use 100% instead of 100vw to avoid potential scrollbar issues */
-  height: 90vh; /* Slightly reduced height to allow for more content below fold */
-  position: relative; /* Needed for absolute positioning of hero-content */
-  display: flex;
+  height: 95vh;
+  position: relative; /* This is crucial for positioning children */
+  display: flex;      /* We use flexbox to easily center the content */
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  color: white; /* Default text color for hero content */
+  overflow: hidden;   /* Prevents the scaled image from creating scrollbars */
+  color: white;
   text-align: center;
 }
 
 .zoom-in-image {
+  /* FIX: Position the image as an absolute background layer */
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.5); /* Starts slightly less zoomed in */
+  object-fit: cover; /* Prevents the image from being stretched or distorted */
+  z-index: -2;       /* Places the image behind everything else */
+
+  /* Animation styles (no changes here) */
+  transform: scale(1.2);
   opacity: 0;
-  transition: transform 2s ease-out, opacity 2s ease-out; /* Slower, smoother transition */
+  transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 2s ease-out;
 }
 
 .zoom-in-image.animate {
-  transform: scale(1); /* Zooms out to normal */
+  transform: scale(1);
   opacity: 1;
 }
 
+.hero-section::after { /* Gradient overlay for text readability */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+  z-index: -1; /* Places the overlay on top of the image but behind the content */
+}
+
 .hero-content {
-  position: absolute; /* Position over the image */
-  z-index: 10; /* Ensure it's above the image */
-  max-width: 900px; /* Max width for readability */
-  padding: 3rem;
-  background-color: rgba(0, 0, 0, 0.55); /* Darker, more solid overlay for better text readability */
-  border-radius: 12px; /* More prominent rounded corners */
-  backdrop-filter: blur(5px); /* Modern blur effect */
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow for depth */
+  z-index: 1; /* Ensures the text content is on the very top */
+  max-width: 800px;
+  padding: 2rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
 
 .hero-content h1 {
-  font-size: 3.8rem; /* Larger, more impactful heading */
-  margin-bottom: 1.5rem;
-  font-weight: 800; /* Extra bold */
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7); /* Stronger text shadow */
-  letter-spacing: -0.03em; /* Tighten letter spacing for large headers */
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  margin-bottom: 1rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .hero-content p {
-  font-size: 1.4rem; /* Larger paragraph text */
-  margin-bottom: 2.5rem;
-  opacity: 0.9;
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.95;
 }
 
 .cta-button {
-  background-color: #24c58c; /* Your brand green */
+  background-color: var(--primary-green);
   color: white;
-  padding: 1.2rem 2.8rem;
+  padding: 1rem 2.5rem;
   border: none;
-  border-radius: 8px; /* Slightly more rounded */
-  font-size: 1.2rem;
+  border-radius: 50px;
+  font-size: 1.1rem;
   font-weight: 700;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 15px rgba(36, 197, 140, 0.4); /* Green shadow */
-  margin-top: 3%;
+  box-shadow: 0 4px 20px rgba(36, 197, 140, 0.4);
 }
 
 .cta-button:hover {
-  background-color: #1ea87a; /* Darker green on hover */
-  transform: translateY(-3px); /* More pronounced lift */
-  box-shadow: 0 6px 20px rgba(36, 197, 140, 0.6);
+  background-color: var(--primary-green-dark);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(36, 197, 140, 0.5);
 }
-
 /* --- Content Sections --- */
 .content-section {
   min-height: 80vh; /* Use min-height for flexibility */
@@ -461,4 +475,61 @@ body, html, #root { /* Target #root as well for full height */
   .story-card h3 {
     font-size: 1.4rem;
   }
+}
+/* --- Map & Popup Styles --- */
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.leaflet-popup-content {
+  margin: 15px !important;
+  line-height: 1.5;
+}
+
+.popup-content h3 {
+  font-family: var(--font-heading);
+  color: var(--primary-green);
+  margin-bottom: 10px;
+  font-size: 1.4rem;
+}
+
+.popup-content h4 {
+  font-family: var(--font-heading);
+  margin-top: 15px;
+  margin-bottom: 5px;
+  border-left: 3px solid var(--primary-green);
+  padding-left: 8px;
+  font-size: 1.1rem;
+}
+
+.popup-content p {
+  margin: 5px 0 10px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.popup-content ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.popup-content li {
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+
+.popup-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.popup-images img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
 }
