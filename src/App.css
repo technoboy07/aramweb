@@ -80,9 +80,9 @@ h1, h2, h3, h4 {
 
 @keyframes carouselFade {
   0% { opacity: 0; }
-  8% { opacity: 1; }
-  33% { opacity: 1; }
-  41% { opacity: 0; }
+  4% { opacity: 1; }
+  20% { opacity: 1; }
+  24% { opacity: 0; }
   100% { opacity: 0; }
 }
 
@@ -104,15 +104,23 @@ h1, h2, h3, h4 {
 }
 
 .carousel-slide:nth-child(1) {
-  animation: carouselFade 12s infinite 0s;
+  animation: carouselFade 20s infinite 0s;
 }
 
 .carousel-slide:nth-child(2) {
-  animation: carouselFade 12s infinite 4s;
+  animation: carouselFade 20s infinite 4s;
 }
 
 .carousel-slide:nth-child(3) {
-  animation: carouselFade 12s infinite 8s;
+  animation: carouselFade 20s infinite 8s;
+}
+
+.carousel-slide:nth-child(4) {
+  animation: carouselFade 20s infinite 12s;
+}
+
+.carousel-slide:nth-child(5) {
+  animation: carouselFade 20s infinite 16s;
 }
 
 /* Navbar */

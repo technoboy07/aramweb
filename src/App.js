@@ -1,21 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import MapSection from './components/MapSection';
+import heroImg1 from './components/assets/images/20240706164225_IMG_9221.JPG';
+import heroImg2 from './components/assets/images/20240706165508_IMG_9240.JPG';
+import heroImg3 from './components/assets/images/20240706175646__MG_9305.JPG';
+import heroImg4 from './components/assets/images/_MG_6099.JPG';
+import heroImg5 from './components/assets/images/IMG_2091.JPG';
 import './App.css';
 
 const carouselImages = [
-  {
-    url: 'https://images.unsplash.com/photo-1758599668299-beebedfabf7b?w=1600&h=900&fit=crop&auto=format',
-    alt: 'Volunteers cleaning up a forest',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1776243773206-a29b683c97fb?w=1600&h=900&fit=crop&auto=format',
-    alt: 'Children playing tug-of-war in a grassy field',
-  },
-  {
-    url: 'https://images.unsplash.com/photo-1758599668209-783bd3691ec8?w=1600&h=900&fit=crop&auto=format',
-    alt: 'Young woman with volunteers in the forest',
-  },
+  { url: heroImg1, alt: 'ASFT community programme' },
+  { url: heroImg2, alt: 'ASFT youth gathering' },
+  { url: heroImg3, alt: 'ASFT outdoor activity' },
+  { url: heroImg4, alt: 'ASFT volunteers in action' },
+  { url: heroImg5, alt: 'ASFT community event' },
 ];
 
 const stats = [
