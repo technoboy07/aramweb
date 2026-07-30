@@ -286,11 +286,253 @@ function TimelineSection() {
   );
 }
 
+const JOIN_QR_URL =
+  'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' +
+  encodeURIComponent('https://wa.me/918508053583?text=Hi%20ASFT%2C%20I%20want%20to%20join%20as%20a%20volunteer');
+
+const DONATE_AMOUNTS = [500, 1000, 2500, 5000];
+
+function DonateModal({ onClose }) {
+  const [amount, setAmount] = useState(1000);
+  const [customAmount, setCustomAmount] = useState('');
+  const [donateForm, setDonateForm] = useState({ name: '', email: '', phone: '', note: '' });
+
+  const selectedAmount = customAmount ? Number(customAmount) : amount;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert(
+      `Thank you, ${donateForm.name}! We'll follow up about your donation of ₹${selectedAmount.toLocaleString('en-IN')}.`
+    );
+    onClose();
+  };
+
+  return (
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="donate-title"
+      onClick={onClose}
+    >
+      <div className="modal-panel donate" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+          ×
+        </button>
+        <div className="modal-body">
+          <span className="modal-eyebrow">Support ASFT</span>
+          <h2 id="donate-title">Make a Donation</h2>
+          <p className="modal-lead">
+            Your contribution helps us run education centres, food drives, and community clean-up
+            programmes across Madurai.
+          </p>
+
+          <div className="amount-grid">
+            {DONATE_AMOUNTS.map((value) => (
+              <button
+                key={value}
+                type="button"
+                className={`amount-chip${!customAmount && amount === value ? ' active' : ''}`}
+                onClick={() => {
+                  setAmount(value);
+                  setCustomAmount('');
+                }}
+              >
+                ₹{value.toLocaleString('en-IN')}
+              </button>
+            ))}
+          </div>
+
+          <form className="modal-form" onSubmit={handleSubmit}>
+            <label htmlFor="donate-custom">Custom amount (₹)</label>
+            <input
+              id="donate-custom"
+              type="number"
+              min="1"
+              placeholder="Enter amount"
+              value={customAmount}
+              onChange={(e) => setCustomAmount(e.target.value)}
+            />
+            <label htmlFor="donate-name">Full name</label>
+            <input
+              id="donate-name"
+              type="text"
+              placeholder="Your name"
+              value={donateForm.name}
+              onChange={(e) => setDonateForm((prev) => ({ ...prev, name: e.target.value }))}
+              required
+            />
+            <label htmlFor="donate-email">Email</label>
+            <input
+              id="donate-email"
+              type="email"
+              placeholder="Your email"
+              value={donateForm.email}
+              onChange={(e) => setDonateForm((prev) => ({ ...prev, email: e.target.value }))}
+              required
+            />
+            <label htmlFor="donate-phone">Phone</label>
+            <input
+              id="donate-phone"
+              type="tel"
+              placeholder="Your phone number"
+              value={donateForm.phone}
+              onChange={(e) => setDonateForm((prev) => ({ ...prev, phone: e.target.value }))}
+              required
+            />
+            <label htmlFor="donate-note">Message (optional)</label>
+            <textarea
+              id="donate-note"
+              placeholder="Any note for us..."
+              value={donateForm.note}
+              onChange={(e) => setDonateForm((prev) => ({ ...prev, note: e.target.value }))}
+            />
+            <button type="submit" className="modal-submit">
+              Donate ₹{Number(selectedAmount || 0).toLocaleString('en-IN')} →
+            </button>
+          </form>
+          <p className="modal-note">
+            Prefer to donate directly? Call or WhatsApp us at{' '}
+            <strong>8508053583</strong>. We&apos;ll share UPI / bank details right away.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function JoinModal({ onClose }) {
+  const [joinForm, setJoinForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    age: '',
+    interest: 'Volunteer',
+    message: '',
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const ageNum = Number(joinForm.age);
+    if (ageNum < 18 || ageNum > 24) {
+      alert('Age criteria is 18 to 24. Please check your age and try again.');
+      return;
+    }
+    alert(`Thank you, ${joinForm.name}! We'll reach out soon about joining ASFT.`);
+    onClose();
+  };
+
+  return (
+    <div
+      className="modal-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="join-title"
+      onClick={onClose}
+    >
+      <div className="modal-panel join" onClick={(e) => e.stopPropagation()}>
+        <button type="button" className="modal-close" onClick={onClose} aria-label="Close">
+          ×
+        </button>
+        <div className="modal-body">
+          <span className="modal-eyebrow">Get Involved</span>
+          <h2 id="join-title">Join Us</h2>
+          <p className="modal-lead">
+            Become part of Aram Saeivom Family Trust — a youth skill development organisation based
+            in Madurai.
+          </p>
+
+          <div className="join-layout">
+            <div className="join-qr-block">
+              <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>
+                Scan the QR code to join via WhatsApp
+              </div>
+              <img src={JOIN_QR_URL} alt="QR code to join ASFT via WhatsApp" />
+              <div className="join-age">Age Criteria — 18 to 24</div>
+              <p className="join-contact">
+                No 381, PTC Post, Transport Nagar, Madurai 625022
+                <br />
+                Mobile: 8508053583
+              </p>
+            </div>
+
+            <form className="modal-form" onSubmit={handleSubmit}>
+              <label htmlFor="join-name">Full name</label>
+              <input
+                id="join-name"
+                type="text"
+                placeholder="Your name"
+                value={joinForm.name}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, name: e.target.value }))}
+                required
+              />
+              <label htmlFor="join-email">Email</label>
+              <input
+                id="join-email"
+                type="email"
+                placeholder="Your email"
+                value={joinForm.email}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, email: e.target.value }))}
+                required
+              />
+              <label htmlFor="join-phone">Phone</label>
+              <input
+                id="join-phone"
+                type="tel"
+                placeholder="Your phone number"
+                value={joinForm.phone}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, phone: e.target.value }))}
+                required
+              />
+              <label htmlFor="join-age">Age</label>
+              <input
+                id="join-age"
+                type="number"
+                min="18"
+                max="24"
+                placeholder="18–24"
+                value={joinForm.age}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, age: e.target.value }))}
+                required
+              />
+              <label htmlFor="join-interest">I want to</label>
+              <select
+                id="join-interest"
+                value={joinForm.interest}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, interest: e.target.value }))}
+              >
+                <option>Volunteer</option>
+                <option>Join a programme</option>
+                <option>Partner with ASFT</option>
+              </select>
+              <label htmlFor="join-message">Message</label>
+              <textarea
+                id="join-message"
+                placeholder="Tell us a little about yourself..."
+                value={joinForm.message}
+                onChange={(e) => setJoinForm((prev) => ({ ...prev, message: e.target.value }))}
+              />
+              <button type="submit" className="modal-submit">
+                Submit Application →
+              </button>
+            </form>
+          </div>
+          <p className="modal-note">
+            Selection &amp; orientation → training → community engagement → reflection. We walk
+            with you through every step.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [navSolid, setNavSolid] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All');
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [activeModal, setActiveModal] = useState(null);
 
   const statsRef = useRef(null);
   const statsVisible = useScrollVisible(statsRef);
@@ -313,6 +555,19 @@ function App() {
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  useEffect(() => {
+    if (!activeModal) return undefined;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setActiveModal(null);
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [activeModal]);
 
   const filteredPrograms =
     activeCategory === 'All'
@@ -351,7 +606,7 @@ function App() {
               {label}
             </button>
           ))}
-          <button type="button" className="btn-donate" onClick={() => scrollTo('contact')}>
+          <button type="button" className="btn-donate" onClick={() => setActiveModal('donate')}>
             Donate
           </button>
         </div>
@@ -376,10 +631,10 @@ function App() {
             leaders, and create belonging.
           </p>
           <div className="hero-ctas">
-            <button type="button" className="btn-primary" onClick={() => scrollTo('contact')}>
+            <button type="button" className="btn-primary" onClick={() => setActiveModal('donate')}>
               Donate Now
             </button>
-            <button type="button" className="btn-ghost" onClick={() => scrollTo('volunteer')}>
+            <button type="button" className="btn-ghost" onClick={() => setActiveModal('join')}>
               Volunteer With Us
             </button>
           </div>
@@ -546,7 +801,7 @@ function App() {
           </div>
 
           <div className="volunteer-cta">
-            <button type="button" className="btn-primary" onClick={() => scrollTo('contact')}>
+            <button type="button" className="btn-primary" onClick={() => setActiveModal('join')}>
               Sign Up to Volunteer
             </button>
           </div>
@@ -614,12 +869,13 @@ function App() {
               </div>
             </div>
             <p className="footer-blurb">
-              Building confident, connected young leaders across Aotearoa New Zealand.
+              Youth skill development organisation building confident, connected young leaders in
+              Madurai and beyond.
             </p>
             <div className="footer-contacts">
               {[
-                { icon: '📍', text: '14 Community Drive, Auckland 1010, NZ' },
-                { icon: '📞', text: '+64 9 555 0194' },
+                { icon: '📍', text: 'No 381, PTC Post, Transport Nagar, Madurai 625022' },
+                { icon: '📞', text: '8508053583' },
                 { icon: '✉️', text: 'hello@asft.org.nz' },
               ].map((item) => (
                 <div key={item.text}>
@@ -700,9 +956,12 @@ function App() {
         </div>
       </footer>
 
-      <button type="button" className="float-donate" onClick={() => scrollTo('contact')}>
+      <button type="button" className="float-donate" onClick={() => setActiveModal('donate')}>
         <span style={{ fontSize: '1rem' }}>❤️</span> Donate
       </button>
+
+      {activeModal === 'donate' && <DonateModal onClose={() => setActiveModal(null)} />}
+      {activeModal === 'join' && <JoinModal onClose={() => setActiveModal(null)} />}
     </div>
   );
 }

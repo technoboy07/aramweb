@@ -1,9 +1,8 @@
 // src/mapData.js
 
-// Import your images
-import parambupattiImg1 from './assets/images/IMG3.JPG';
-import parambupattiImg2 from './assets/images/IMG2.JPG';
-import anotherProgramImg1 from './assets/images/IMG1.JPG';
+import programImg1 from './assets/images/IMG1.JPG';
+import programImg2 from './assets/images/IMG2.JPG';
+import programImg3 from './assets/images/IMG3.JPG';
 
 export const programData = [
   {
@@ -22,7 +21,7 @@ export const programData = [
       'Distributed 500+ hygiene kits.',
       'Saw a 40% reduction in waterborne illnesses in 6 months.'
     ],
-    images: [parambupattiImg1, parambupattiImg2]
+    images: [programImg1, programImg2]
   },
   {
     id: 2,
@@ -40,7 +39,6 @@ export const programData = [
       'Hosted environmental workshops for 2,000+ students.',
       'Transformed a barren plot into a vibrant biodiversity park.'
     ],
-    images: [anotherProgramImg1]
+    images: [programImg3]
   }
-  // ...add more program objects here
 ];
