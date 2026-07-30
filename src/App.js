@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import MapSection from './components/MapSection';
-import heroImg1 from './components/assets/images/20240706164225_IMG_9221.JPG';
-import heroImg2 from './components/assets/images/20240706165508_IMG_9240.JPG';
-import heroImg3 from './components/assets/images/20240706175646__MG_9305.JPG';
-import heroImg4 from './components/assets/images/_MG_6099.JPG';
-import heroImg5 from './components/assets/images/IMG_2091.JPG';
+import heroImg1 from './components/assets/images/IMG1.JPG';
+import heroImg2 from './components/assets/images/IMG2.JPG';
+import heroImg3 from './components/assets/images/IMG3.JPG';
+import heroImg4 from './components/assets/images/IMG4.JPG';
+import heroImg5 from './components/assets/images/IMG5.JPG';
 import './App.css';
 
 const carouselImages = [

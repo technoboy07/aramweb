@@ -1,9 +1,9 @@
 // src/mapData.js
 
 // Import your images
-import parambupattiImg1 from './assets/images/img1.jpg';
-import parambupattiImg2 from './assets/images/img2.jpg';
-import anotherProgramImg1 from './assets/images/img3.jpg';
+import parambupattiImg1 from './assets/images/IMG3.JPG';
+import parambupattiImg2 from './assets/images/IMG2.JPG';
+import anotherProgramImg1 from './assets/images/IMG1.JPG';
 
 export const programData = [
   {
