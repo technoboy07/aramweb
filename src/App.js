@@ -30,7 +30,7 @@ const allPrograms = [
     title: 'Neighbourhood Connect',
     icon: '🤝',
     desc: 'Building bridges between youth and local leaders through structured dialogue, mentorship, and community projects that create lasting civic bonds.',
-    color: '#0d5260',
+    color: '#122847',
   },
   {
     id: 'ce2',
@@ -38,7 +38,7 @@ const allPrograms = [
     title: 'Urban Green Initiative',
     icon: '🌿',
     desc: 'Youth-led environmental clean-up drives, urban gardening, and sustainability workshops that revitalize shared spaces.',
-    color: '#0d5260',
+    color: '#122847',
   },
   {
     id: 'tp1',
@@ -46,7 +46,7 @@ const allPrograms = [
     title: 'Digital Skills Academy',
     icon: '💻',
     desc: 'Hands-on coding, graphic design, and digital literacy sessions tailored for underserved youth aged 14–24.',
-    color: '#e85d4a',
+    color: '#3d9fd9',
   },
   {
     id: 'tp2',
@@ -54,7 +54,7 @@ const allPrograms = [
     title: 'Leadership Bootcamp',
     icon: '🎯',
     desc: 'Six-week intensive that develops communication, conflict resolution, and project management skills through real community challenges.',
-    color: '#e85d4a',
+    color: '#3d9fd9',
   },
   {
     id: 'oe1',
@@ -62,7 +62,7 @@ const allPrograms = [
     title: 'Trail & Summit',
     icon: '⛰️',
     desc: 'Multi-day hiking and camping expeditions designed to foster resilience, teamwork, and a deep connection to nature.',
-    color: '#c99a5f',
+    color: '#5a9fd4',
   },
   {
     id: 'oe2',
@@ -70,7 +70,7 @@ const allPrograms = [
     title: 'River & Roots',
     icon: '🛶',
     desc: 'Water-based adventures combined with ecological learning — kayaking, fishing, and conservation fieldwork along local waterways.',
-    color: '#c99a5f',
+    color: '#5a9fd4',
   },
 ];
 
@@ -533,6 +533,8 @@ function App() {
   const [testimonialIdx, setTestimonialIdx] = useState(0);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [activeModal, setActiveModal] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [flippedTeam, setFlippedTeam] = useState(null);
 
   const statsRef = useRef(null);
   const statsVisible = useScrollVisible(statsRef);
@@ -557,17 +559,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!activeModal) return undefined;
+    if (!activeModal && !menuOpen) return undefined;
     const onKey = (e) => {
-      if (e.key === 'Escape') setActiveModal(null);
+      if (e.key === 'Escape') {
+        setActiveModal(null);
+        setMenuOpen(false);
+      }
     };
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = activeModal || menuOpen ? 'hidden' : '';
     window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = '';
       window.removeEventListener('keydown', onKey);
     };
-  }, [activeModal]);
+  }, [activeModal, menuOpen]);
 
   const filteredPrograms =
     activeCategory === 'All'
@@ -576,6 +581,12 @@ function App() {
 
   const scrollTo = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMenuOpen(false);
+  };
+
+  const openModal = (type) => {
+    setMenuOpen(false);
+    setActiveModal(type);
   };
 
   const handleSubmit = (e) => {
@@ -586,7 +597,7 @@ function App() {
 
   return (
     <div className="app-shell">
-      <nav className={`site-nav${navSolid ? ' solid' : ''}`}>
+      <nav className={`site-nav${navSolid || menuOpen ? ' solid' : ''}`}>
         <button type="button" className="nav-brand" onClick={() => scrollTo('hero')}>
           <div className="nav-brand-mark">A</div>
           <div>
@@ -595,7 +606,19 @@ function App() {
           </div>
         </button>
 
-        <div className="nav-links">
+        <button
+          type="button"
+          className={`nav-toggle${menuOpen ? ' open' : ''}`}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <div className={`nav-links${menuOpen ? ' open' : ''}`}>
           {[
             ['About', 'about'],
             ['Programs', 'programs'],
@@ -606,7 +629,7 @@ function App() {
               {label}
             </button>
           ))}
-          <button type="button" className="btn-donate" onClick={() => setActiveModal('donate')}>
+          <button type="button" className="btn-donate" onClick={() => openModal('donate')}>
             Donate
           </button>
         </div>
@@ -631,10 +654,10 @@ function App() {
             leaders, and create belonging.
           </p>
           <div className="hero-ctas">
-            <button type="button" className="btn-primary" onClick={() => setActiveModal('donate')}>
+            <button type="button" className="btn-primary" onClick={() => openModal('donate')}>
               Donate Now
             </button>
-            <button type="button" className="btn-ghost" onClick={() => setActiveModal('join')}>
+            <button type="button" className="btn-ghost" onClick={() => openModal('join')}>
               Volunteer With Us
             </button>
           </div>
@@ -755,12 +778,27 @@ function App() {
           <div className={`section-header fade-up${teamVisible ? ' visible' : ''}`} style={{ marginBottom: 56 }}>
             <span className="pill pill-teal-soft">The People</span>
             <h2>Meet the Team</h2>
-            <p>Hover over a card to learn more about each team member.</p>
+            <p className="team-hint">Tap or hover a card to learn more about each team member.</p>
           </div>
 
           <div className="team-grid">
             {teamMembers.map((member, i) => (
-              <div key={member.name} className="team-card">
+              <div
+                key={member.name}
+                className={`team-card${flippedTeam === member.name ? ' flipped' : ''}`}
+                onClick={() =>
+                  setFlippedTeam((current) => (current === member.name ? null : member.name))
+                }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setFlippedTeam((current) => (current === member.name ? null : member.name));
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`${member.name}, ${member.role}. Activate to flip card.`}
+              >
                 <div className="team-card-inner">
                   <div className="team-card-front">
                     <img src={member.img} alt={member.name} />
@@ -801,7 +839,7 @@ function App() {
           </div>
 
           <div className="volunteer-cta">
-            <button type="button" className="btn-primary" onClick={() => setActiveModal('join')}>
+            <button type="button" className="btn-primary" onClick={() => openModal('join')}>
               Sign Up to Volunteer
             </button>
           </div>
@@ -876,7 +914,7 @@ function App() {
               {[
                 { icon: '📍', text: 'No 381, PTC Post, Transport Nagar, Madurai 625022' },
                 { icon: '📞', text: '8508053583' },
-                { icon: '✉️', text: 'hello@asft.org.nz' },
+                { icon: '✉️', text: 'aramsaeivom@gmail.com' },
               ].map((item) => (
                 <div key={item.text}>
                   <span style={{ fontSize: '0.95rem', marginTop: 1 }}>{item.icon}</span>
@@ -956,7 +994,7 @@ function App() {
         </div>
       </footer>
 
-      <button type="button" className="float-donate" onClick={() => setActiveModal('donate')}>
+      <button type="button" className="float-donate" onClick={() => openModal('donate')}>
         <span style={{ fontSize: '1rem' }}>❤️</span> Donate
       </button>
 

@@ -29,6 +29,7 @@ function MapSection() {
         <MapContainer
           center={mapCenter}
           zoom={7}
+          className="reach-map"
           style={{ height: '560px', width: '100%' }}
         >
           <TileLayer
